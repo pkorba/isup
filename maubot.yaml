@@ -1,0 +1,7 @@
+maubot: 0.1.0
+id: com.github.pkorba.isup
+version: 1.0.0
+license: MIT
+modules:
+  - isup
+main_class: IsUpBot
