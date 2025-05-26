@@ -10,24 +10,22 @@ class IsUpBot(Plugin):
     async def isup(self, evt: MessageEvent, message: str) -> None:
         url = await self.parse_url(message)
         if not url.hostname:
-            await evt.reply("I'm sorry. Address you provided is not a valid.")
+            await evt.reply("Incorrect URL.")
             return
         try:
             full_url = url._replace(path="", params="", query="", fragment="").geturl()
-            timeout = aiohttp.ClientTimeout(total=30)
+            timeout = aiohttp.ClientTimeout(total=15)
             async with aiohttp.ClientSession(timeout=timeout) as session:
                 async with session.get(full_url) as response:
                     if response.status < 400:
-                        await evt.respond(f"{url.hostname} is up.")
+                        await evt.reply(f"{url.hostname} is up.")
                     else:
-                        await evt.respond(f"{url.hostname} appears to be down from here.")
-        except aiohttp.ServerTimeoutError:
-            await evt.respond(f"Connection to {url.hostname} timed out. "
-                              f"The site might be operational but under heavy load.")
+                        await evt.reply(f"{url.hostname} is up, but server returns an error.")
+        except TimeoutError:
+            await evt.reply(f"{url.hostname} is down.")
         except aiohttp.ClientError as e:
             self.log.error(f"Connection failed: {url.hostname}: {e}")
-            await evt.reply("I'm sorry. I wasn't able to carry out your request because "
-                            "I ran into a problem connecting to the specified address.")
+            await evt.reply(f"Failed to check status of {url.hostname}. Connection error.")
 
     @staticmethod
     async def parse_url(message: str) -> ParseResult:
