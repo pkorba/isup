@@ -8,6 +8,7 @@ class IsUpBot(Plugin):
     @command.new(name="isup", help="check if website is online")
     @command.argument("message", pass_raw=True)
     async def isup(self, evt: MessageEvent, message: str) -> None:
+        await evt.mark_read()
         url = await self.parse_url(message)
         if not url.hostname:
             await evt.reply("Incorrect URL.")
