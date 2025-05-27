@@ -6,9 +6,13 @@ from urllib.parse import urlparse, ParseResult
 
 class IsUpBot(Plugin):
     @command.new(name="isup", help="check if website is online")
-    @command.argument("message", pass_raw=True)
+    @command.argument("message", pass_raw=True, required=True)
     async def isup(self, evt: MessageEvent, message: str) -> None:
         await evt.mark_read()
+        message = message.strip()
+        if not message:
+            await evt.respond("Usage: !isup <url>")
+            return
         url = await self.parse_url(message)
         if not url.hostname:
             await evt.reply("Incorrect URL.")
