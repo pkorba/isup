@@ -5,6 +5,7 @@ A maubot for Matrix messaging that checks if website is online. It requires no c
 ![bot_isup](https://github.com/user-attachments/assets/ea9b0b83-2f8e-436d-8ab5-112a825097a3)
 
 ## Usage
+Type the `isup` command followed by an address of a website which status you want to check.
 ```
 [p]isup url
 ```
