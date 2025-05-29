@@ -17,10 +17,17 @@ class IsUpBot(Plugin):
         if not url.hostname:
             await evt.reply("Incorrect URL.")
             return
+
+        headers = {
+            "Sec-GPC": "1",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pl,en-US;q=0.7,en;q=0.3",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0"
+        }
         try:
             full_url = url._replace(path="", params="", query="", fragment="").geturl()
             timeout = aiohttp.ClientTimeout(total=15)
-            async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with aiohttp.ClientSession(timeout=timeout, headers=headers) as session:
                 async with session.get(full_url) as response:
                     if response.status < 400:
                         await evt.reply(f"{url.hostname} is up.")
