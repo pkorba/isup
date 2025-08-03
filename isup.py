@@ -22,7 +22,7 @@ class IsUpBot(Plugin):
             "Sec-GPC": "1",
             "accept-encoding": "gzip, deflate, br, zstd",
             "accept-language": "en,en-US;q=0.5",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0"
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0"
         }
         try:
             full_url = url._replace(path="", params="", query="", fragment="").geturl()
@@ -39,9 +39,8 @@ class IsUpBot(Plugin):
             self.log.error(f"Connection failed: {url.hostname}: {e}")
             await evt.reply(f"> Failed to check status of {url.hostname}. Connection error.")
 
-    @staticmethod
-    async def parse_url(url: str) -> ParseResult:
-        if not url.lower().startswith("http://") and not url.lower().startswith("https://"):
+    async def parse_url(self, url: str) -> ParseResult:
+        if not url.lower().startswith(("http://", "https://")):
             url = f"https://{url}"
         new_url = urlparse(url)
         return new_url
